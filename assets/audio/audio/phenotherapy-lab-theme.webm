@@ -1,0 +1,191 @@
+<h2 class="sr-only">A recordable version of the PhenoTherapy Lab instrumental track that captures audio and downloads it as a WAV file.</h2>
+<div style="background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.75rem 1.5rem; max-width: 460px; margin: 1rem auto;">
+
+  <div style="margin-bottom: 1.5rem;">
+    <p style="font-size: 18px; font-weight: 500; margin: 0; color: var(--color-text-primary);">PhenoTherapy Lab — recorder</p>
+    <p style="font-size: 13px; color: var(--color-text-secondary); margin: 4px 0 0;">record the 2:30 track and download as WAV</p>
+  </div>
+
+  <div style="display: flex; gap: 10px; margin-bottom: 1.25rem; flex-wrap: wrap;">
+    <button id="recBtn" style="flex: 1; min-width: 130px; height: 44px; cursor: pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+      <i class="ti ti-player-record" aria-hidden="true"></i> 녹음 시작
+    </button>
+    <button id="dlBtn" disabled style="flex: 1; min-width: 130px; height: 44px; cursor: pointer; opacity:0.4; display:flex; align-items:center; justify-content:center; gap:8px;">
+      <i class="ti ti-download" aria-hidden="true"></i> WAV 다운로드
+    </button>
+  </div>
+
+  <div style="width: 100%; height: 6px; border-radius: 3px; background: var(--color-border-tertiary); position: relative; overflow: hidden; margin-bottom: 6px;">
+    <div id="prog" style="position: absolute; left: 0; top: 0; height: 100%; width: 0%; background: var(--color-text-info);"></div>
+  </div>
+  <div style="display:flex; justify-content:space-between;">
+    <span id="cur" style="font-size: 12px; color: var(--color-text-secondary); font-family: var(--font-mono);">0:00</span>
+    <span style="font-size: 12px; color: var(--color-text-secondary); font-family: var(--font-mono);">2:30</span>
+  </div>
+
+  <div id="status" style="font-size: 12px; color: var(--color-text-tertiary); text-align: center; min-height: 16px; margin-top: 10px;">"녹음 시작"을 누르면 트랙이 재생되며 녹음됩니다</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+<script>
+(function(){
+  const TOTAL = 150;
+  let started = false, recording = false, raf = null;
+  let recorder = null, recDest = null, chunks = [], wavUrl = null;
+  const parts = [];
+
+  const recBtn = document.getElementById('recBtn');
+  const dlBtn = document.getElementById('dlBtn');
+  const prog = document.getElementById('prog');
+  const cur = document.getElementById('cur');
+  const statusEl = document.getElementById('status');
+
+  function fmt(s){ s=Math.max(0,Math.floor(s)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+
+  function build(masterOut){
+    Tone.Transport.bpm.value = 94;
+
+    const reverb = new Tone.Reverb({decay: 7, wet: 0.38}).connect(masterOut);
+    const delay = new Tone.PingPongDelay("4n.", 0.3).connect(reverb);
+    delay.wet.value = 0.26;
+
+    const bass = new Tone.MonoSynth({
+      oscillator:{type:"sine"},
+      envelope:{attack:0.2,decay:0.4,sustain:0.9,release:1.6},
+      filter:{Q:0.5,type:"lowpass",rolloff:-12},
+      filterEnvelope:{attack:0.3,decay:0.5,sustain:0.8,baseFrequency:95,octaves:1}
+    });
+    new Tone.Volume(-11).connect(masterOut); 
+    const bassVol = new Tone.Volume(-11).connect(masterOut); bass.connect(bassVol);
+
+    const pad = new Tone.PolySynth(Tone.Synth, {
+      oscillator:{type:"fatsine", count:4, spread:35},
+      envelope:{attack:0.8,decay:0.8,sustain:0.85,release:3.5}
+    });
+    const padVol = new Tone.Volume(-16).connect(reverb); pad.connect(padVol);
+
+    const bell = new Tone.FMSynth({
+      harmonicity:3.01, modulationIndex:8,
+      oscillator:{type:"sine"},
+      envelope:{attack:0.005,decay:1.1,sustain:0,release:1.4},
+      modulation:{type:"sine"},
+      modulationEnvelope:{attack:0.01,decay:0.4,sustain:0,release:0.5}
+    });
+    const bellVol = new Tone.Volume(-13).connect(delay); bell.connect(bellVol);
+
+    const brass = new Tone.PolySynth(Tone.Synth, {
+      oscillator:{type:"fatsawtooth", count:3, spread:22},
+      envelope:{attack:0.9,decay:0.6,sustain:0.75,release:2.2}
+    });
+    const brassVol = new Tone.Volume(-20).connect(reverb); brass.connect(brassVol);
+
+    const kick = new Tone.MembraneSynth({pitchDecay:0.05,octaves:4,envelope:{attack:0.002,decay:0.3,sustain:0}});
+    const kickVol = new Tone.Volume(-8).connect(masterOut); kick.connect(kickVol);
+    const snare = new Tone.NoiseSynth({noise:{type:"pink"},envelope:{attack:0.002,decay:0.18,sustain:0}});
+    const snFilt = new Tone.Filter(1800,"highpass");
+    const snVol = new Tone.Volume(-17).connect(masterOut); snare.connect(snFilt); snFilt.connect(snVol);
+    const hat = new Tone.NoiseSynth({noise:{type:"white"},envelope:{attack:0.001,decay:0.025,sustain:0}});
+    const hatFilt = new Tone.Filter(10000,"highpass");
+    const hatVol = new Tone.Volume(-26).connect(masterOut); hat.connect(hatFilt); hatFilt.connect(hatVol);
+
+    const padChords = [["C3","G3","D4"],["A2","E3","B3"],["F2","C3","G3"],["G2","D3","A3"]];
+    const brassChords = [["E4","G4","C5"],["E4","A4","C5"],["F4","A4","C5"],["D4","G4","B4"]];
+    const bassNotes = ["C2","A1","F1","G1"];
+    const bellSeq = ["G5","C6","E6","D6","G6","E6","C6","D6"];
+
+    let bar = 0;
+    parts.push(new Tone.Loop((time)=>{ pad.triggerAttackRelease(padChords[bar%4],"1m",time,0.4); bar++; }, "1m").start(0));
+    let beli = 0;
+    parts.push(new Tone.Loop((time)=>{ bell.triggerAttackRelease(bellSeq[beli%bellSeq.length],"8n",time,0.55); beli++; }, "4n.").start(0));
+    let bi = 0;
+    parts.push(new Tone.Loop((time)=>{ bass.triggerAttackRelease(bassNotes[bi%4],"1m",time,0.8); bi++; }, "1m").start(0));
+    parts.push(new Tone.Loop((time)=>{ hat.triggerAttackRelease("32n",time); }, "8n").start("2n"));
+    let beat = 0;
+    parts.push(new Tone.Loop((time)=>{
+      const t = Tone.Transport.seconds;
+      if(beat%4===0) kick.triggerAttackRelease("C1","8n",time);
+      if(t>=80 && beat%4===2) snare.triggerAttackRelease("8n",time);
+      beat++;
+    }, "4n").start("1m"));
+    let ci = 0;
+    parts.push(new Tone.Loop((time)=>{
+      if(Tone.Transport.seconds>=30) brass.triggerAttackRelease(brassChords[ci%4],"1m",time,0.5);
+      ci++;
+    }, "1m").start("2m"));
+  }
+
+  function tick(){
+    if(!recording) return;
+    const e = Tone.Transport.seconds;
+    prog.style.width = Math.min(100,(e/TOTAL)*100)+'%';
+    cur.textContent = fmt(e);
+    if(e >= TOTAL){ finish(); return; }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function finish(){
+    recording = false;
+    Tone.Transport.stop();
+    Tone.Transport.seconds = 0;
+    if(raf) cancelAnimationFrame(raf);
+    if(recorder && recorder.state !== "inactive") recorder.stop();
+    prog.style.width = '100%';
+    cur.textContent = fmt(TOTAL);
+    recBtn.disabled = false;
+    recBtn.innerHTML = '<i class="ti ti-player-record" aria-hidden="true"></i> 다시 녹음';
+    statusEl.textContent = '인코딩 중...';
+  }
+
+  recBtn.addEventListener('click', async ()=>{
+    await Tone.start();
+    const ctx = Tone.getContext().rawContext;
+
+    if(!started){
+      recDest = ctx.createMediaStreamDestination();
+      const master = new Tone.Gain(1);
+      master.connect(Tone.getDestination()); 
+      master.connect(recDest);              
+      build(master);
+      started = true;
+    }
+
+    if(recording) return;
+
+    chunks = [];
+    let mime = 'audio/webm';
+    if(MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) mime = 'audio/webm;codecs=opus';
+    else if(MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) mime = 'audio/ogg;codecs=opus';
+    recorder = new MediaRecorder(recDest.stream, {mimeType: mime});
+    recorder.ondataavailable = e => { if(e.data.size>0) chunks.push(e.data); };
+    recorder.onstop = ()=>{
+      const blob = new Blob(chunks, {type: mime});
+      if(wavUrl) URL.revokeObjectURL(wavUrl);
+      wavUrl = URL.createObjectURL(blob);
+      dlBtn.disabled = false;
+      dlBtn.style.opacity = '1';
+      const ext = mime.indexOf('ogg')>=0 ? 'ogg' : 'webm';
+      dlBtn.dataset.ext = ext;
+      statusEl.textContent = '완료 — "다운로드"를 눌러 파일을 받으세요 (.' + ext + ')';
+    };
+
+    Tone.Transport.seconds = 0;
+    recorder.start();
+    Tone.Transport.start();
+    recording = true;
+    recBtn.disabled = true;
+    dlBtn.disabled = true;
+    dlBtn.style.opacity = '0.4';
+    statusEl.textContent = '녹음 중... (2:30, 자동 종료)';
+    tick();
+  });
+
+  dlBtn.addEventListener('click', ()=>{
+    if(!wavUrl) return;
+    const a = document.createElement('a');
+    a.href = wavUrl;
+    a.download = 'phenotherapy-lab-theme.' + (dlBtn.dataset.ext || 'webm');
+    document.body.appendChild(a); a.click(); a.remove();
+  });
+})();
+</script>
