@@ -1,7 +1,7 @@
 ---
 permalink: /member/
 title: "Members / 구성원"
-author_profile: true
+author_profile: false
 ---
 
 ## PhenoTherapy Laboratory Members / 연구실 구성원
