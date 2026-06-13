@@ -1,7 +1,7 @@
 ---
 permalink: /publication/
 title: "Publications / 논문"
-author_profile: true
+author_profile: false
 ---
 
 ## Publications / 발표 논문
