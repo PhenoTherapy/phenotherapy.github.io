@@ -24,7 +24,7 @@ Registered Pharmacist, Republic of Korea (대한민국 약사 면허 소지)
 
 ### Education / 학력
 
-- **M.S./Ph.D. (석박사 통합)**, Pharmaceutical Sciences, Department of Pharmacy, Ewha Womans University, Seoul (2017)
+- **M.S./Ph.D.**, Pharmaceutical Sciences, Department of Pharmacy, Ewha Womans University, Seoul (2017)
   - Dissertation: *Mechanistic Study of Radioresistance based on Bioinformatics*
 - **B.S.**, Pharmacy, College of Pharmacy, Ewha Womans University, Seoul (2012)
 
@@ -32,7 +32,7 @@ Registered Pharmacist, Republic of Korea (대한민국 약사 면허 소지)
 
 ### Professional Experience / 경력
 
-- **2024.03 – 현재** — Assistant Professor, College of Pharmacy, Ewha Womans University
+- **2024.03 – Present** — Assistant Professor, College of Pharmacy, Ewha Womans University
 - **2022.03 – 2024.02** — Senior Researcher, Center for Genome Engineering, Institute for Basic Science (IBS), Daejeon
 - **2020.09 – 2022.02** — Research Assistant Professor, School of Life Sciences, GIST, Gwangju
 - **2017.09 – 2020.08** — Postdoctoral Fellow, School of Life Sciences, GIST, Gwangju (Advisor: Dr. Jeong-Seok Nam)
@@ -40,7 +40,7 @@ Registered Pharmacist, Republic of Korea (대한민국 약사 면허 소지)
 
 ---
 
-### Research Interests / 연구 관심 분야
+### Research Interests / 연구 분야
 
 암 생물학, 분자세포생물학, 생물정보학을 융합하여 새로운 치료 표적과 전략을 발굴합니다.
 
@@ -55,7 +55,7 @@ Registered Pharmacist, Republic of Korea (대한민국 약사 면허 소지)
 - Travel Grant, The 78th Annual Meeting of the Japanese Cancer Association (2019)
 - Best Poster Prize, Korean Association for Laboratory Animal Science Winter Symposium (2018)
 - Research Scholarship, Samsung Card Co. (2014)
-- (이화여대 부임 이후 수상 내역이 있으면 추가하세요)
+
 
 ---
 
@@ -63,4 +63,3 @@ Registered Pharmacist, Republic of Korea (대한민국 약사 면허 소지)
 
 - American Association for Cancer Research (AACR), Associate Member (2019 – Present)
 
-> 교수 사진은 `/images/professor.jpg` 파일을 올리면 자동으로 표시됩니다 (아래 안내 참고).
