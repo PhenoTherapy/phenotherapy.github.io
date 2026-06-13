@@ -27,5 +27,22 @@ Our lab integrates cancer biology, molecular & cell biology, and bioinformatics 
 - College of Pharmacy, Ewha Womans University, Seoul, Korea
 - Email: syeonp@ewha.ac.kr
 
-> 이 페이지는 임시 예시입니다. 자유롭게 내용을 수정하세요.
-> This is placeholder content. Please edit freely.
+<audio id="bgm" loop preload="auto">
+  <source src="{{ '/assets/audio/phenotherapy-lab-theme.webm' | relative_url }}" type="audio/webm">
+</audio>
+<button id="bgm-toggle" aria-label="배경음악 켜기/끄기" style="position:fixed; right:16px; bottom:16px; z-index:9999;
+  width:48px; height:48px; border-radius:50%; border:none; cursor:pointer;
+  background:#2b6cb0; color:#fff; font-size:20px; box-shadow:0 2px 8px rgba(0,0,0,0.25);">🔈</button>
+<script>
+(function(){
+  var a = document.getElementById('bgm');
+  var b = document.getElementById('bgm-toggle');
+  a.volume = 0.5;
+  function update(){ b.textContent = a.paused ? '🔈' : '🔊'; }
+  update();
+  b.addEventListener('click', function(){
+    if(a.paused){ a.play(); } else { a.pause(); }
+    update();
+  });
+})();
+</script>
