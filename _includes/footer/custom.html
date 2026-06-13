@@ -10,57 +10,44 @@
 </script>
 <!-- end custom footer snippets -->
 
-<!-- ===== 배경음악: 페이지 전환에도 끊기지 않는 플레이어 (swup 연동) ===== -->
+<!-- ===== 1부: 배경음악 버튼 (항상 작동 / swup과 독립) ===== -->
+<script>
+(function(){
+  if (window.__bgmReady) return;
+  window.__bgmReady = true;
+  var url = "{{ '/assets/audio/phenotherapy-lab-theme.mp3' | relative_url }}";
+  var a = document.createElement('audio');
+  a.id = 'bgm'; a.loop = true; a.preload = 'auto'; a.volume = 0.5;
+  var s = document.createElement('source');
+  s.src = url; s.type = 'audio/mpeg';
+  a.appendChild(s);
+  var b = document.createElement('button');
+  b.id = 'bgm-toggle';
+  b.setAttribute('aria-label', '배경음악 켜기/끄기');
+  b.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:99999;width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;background:#2b6cb0;color:#fff;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,0.25);';
+  function update(){ b.textContent = a.paused ? '🔈' : '🔊'; }
+  b.addEventListener('click', function(){
+    if (a.paused) { a.play(); } else { a.pause(); }
+  });
+  a.addEventListener('play', update);
+  a.addEventListener('pause', update);
+  document.documentElement.appendChild(a);
+  document.documentElement.appendChild(b);
+  update();
+})();
+</script>
+
+<!-- ===== 2부: swup (페이지 전환 시 음악 유지) / 실패해도 1부는 영향 없음 ===== -->
 <script src="https://cdn.jsdelivr.net/npm/swup@4/dist/Swup.umd.js"></script>
 <script>
 (function(){
-  var AUDIO_URL = "{{ '/assets/audio/phenotherapy-lab-theme.mp3' | relative_url }}";
-
-  // 플레이어를 단 한 번만 생성하여 <html> 요소에 직접 부착.
-  // body가 아니라 html에 붙이면 swup이 body 내부를 교체해도 영향을 받지 않습니다.
-  function ensurePlayer(){
-    var a = document.getElementById('bgm');
-    var b = document.getElementById('bgm-toggle');
-
-    if (!a) {
-      a = document.createElement('audio');
-      a.id = 'bgm';
-      a.loop = true;
-      a.preload = 'auto';
-      a.volume = 0.5;
-      var src = document.createElement('source');
-      src.src = AUDIO_URL;
-      src.type = 'audio/mpeg';
-      a.appendChild(src);
-      document.documentElement.appendChild(a);
-    }
-    if (!b) {
-      b = document.createElement('button');
-      b.id = 'bgm-toggle';
-      b.setAttribute('aria-label', '배경음악 켜기/끄기');
-      b.style.cssText = 'position:fixed; right:16px; bottom:16px; z-index:99999;' +
-        'width:48px; height:48px; border-radius:50%; border:none; cursor:pointer;' +
-        'background:#2b6cb0; color:#fff; font-size:20px; box-shadow:0 2px 8px rgba(0,0,0,0.25);';
-      function update(){ b.textContent = a.paused ? '🔈' : '🔊'; }
-      b.addEventListener('click', function(){
-        if (a.paused) { a.play(); } else { a.pause(); }
-        update();
-      });
-      a.addEventListener('play', update);
-      a.addEventListener('pause', update);
-      document.documentElement.appendChild(b);
-      update();
-    }
-  }
-
-  ensurePlayer();
-
-  // swup을 켜고, 페이지가 바뀔 때마다 플레이어가 살아있는지 확인
   function startSwup(){
-    if (typeof Swup === 'undefined') { return; }
-    var swup = new Swup({ containers: ['#main'], animationSelector: false });
-    // 매 페이지 전환 후에도 버튼이 최상단에 보장되도록 재확인
-    swup.hooks.on('page:view', function(){ ensurePlayer(); });
+    if (typeof Swup === 'undefined') return;
+    try {
+      new Swup({ containers: ['#main'], animationSelector: false });
+    } catch (e) {
+      console.log('swup 시작 실패:', e);
+    }
   }
   if (document.readyState !== 'loading') { startSwup(); }
   else { window.addEventListener('DOMContentLoaded', startSwup); }
