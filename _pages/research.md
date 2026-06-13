@@ -1,7 +1,7 @@
 ---
 permalink: /research/
 title: "Research / 연구"
-author_profile: true
+author_profile: false
 ---
 
 ## Research Overview / 연구 개요
