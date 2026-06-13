@@ -38,11 +38,11 @@ author:
   googlescholar    : # 본인 Google Scholar 프로필 주소를 넣으세요
   inspire-hep      : # URL
   impactstory      : # URL
-  orcid            : # https://orcid.org/0000-0000-0000-0000 형식의 본인 ORCID 주소를 넣으세요
+  orcid            : "https://orcid.org/0000-0002-5749-3120"
   semantic         : # URL
   ssrn             : # URL
   pubmed           : # 본인 PubMed 검색 결과 주소를 넣으세요
-  researchgate     : # URL
+  researchgate     : "https://www.researchgate.net/profile/So-Yeon-Park-9"
   scopus           : # URL
   zotero           : # URL
 
