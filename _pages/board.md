@@ -1,7 +1,7 @@
 ---
 permalink: /board/
 title: "Board / 게시판"
-author_profile: true
+author_profile: false
 ---
 
 ## Lab News & Notices / 연구실 소식 및 공지
