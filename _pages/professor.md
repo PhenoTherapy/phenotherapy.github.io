@@ -1,7 +1,7 @@
 ---
 permalink: /professor/
 title: "Professor / 책임교수"
-author_profile: true
+author_profile: false
 ---
 
 <img src="/images/professor.jpg" alt="So-Yeon Park" width="200" style="border-radius: 8px; float: right; margin-left: 20px;">
@@ -15,8 +15,8 @@ College of Pharmacy, Ewha Womans University (이화여자대학교 약학대학)
 Principal Investigator, PhenoTherapy Laboratory
 
 - **Email:** syeonp@ewha.ac.kr
-- **ORCID:** [0000-0002-5749-3120](https://orcid.org/0000-0002-5749-3120)
-- **ResearchGate:** [So-Yeon Park](https://www.researchgate.net/profile/So-Yeon-Park-9)
+- **Tel:** +82-2-XXXX-XXXX
+- **Location:** Room 302, Pharmaceutical Science Building B, Ewha Womans University, 52 Ewhayeodae-gil, Seodaemun-gu, Seoul 03760, Republic of Korea
 
 Registered Pharmacist, Republic of Korea (대한민국 약사 면허 소지)
 
@@ -32,7 +32,7 @@ Registered Pharmacist, Republic of Korea (대한민국 약사 면허 소지)
 
 ### Professional Experience / 경력
 
-- **2024.03 – Present** — Assistant Professor, College of Pharmacy, Ewha Womans University
+- **2024.03 – present** — Assistant Professor, College of Pharmacy, Ewha Womans University
 - **2022.03 – 2024.02** — Senior Researcher, Center for Genome Engineering, Institute for Basic Science (IBS), Daejeon
 - **2020.09 – 2022.02** — Research Assistant Professor, School of Life Sciences, GIST, Gwangju
 - **2017.09 – 2020.08** — Postdoctoral Fellow, School of Life Sciences, GIST, Gwangju (Advisor: Dr. Jeong-Seok Nam)
@@ -40,7 +40,7 @@ Registered Pharmacist, Republic of Korea (대한민국 약사 면허 소지)
 
 ---
 
-### Research Interests / 연구 분야
+### Research Interests / 연구 관심 분야
 
 암 생물학, 분자세포생물학, 생물정보학을 융합하여 새로운 치료 표적과 전략을 발굴합니다.
 
@@ -56,10 +56,8 @@ Registered Pharmacist, Republic of Korea (대한민국 약사 면허 소지)
 - Best Poster Prize, Korean Association for Laboratory Animal Science Winter Symposium (2018)
 - Research Scholarship, Samsung Card Co. (2014)
 
-
 ---
 
 ### Professional Activities / 학회 활동
 
 - American Association for Cancer Research (AACR), Associate Member (2019 – Present)
-
