@@ -1,7 +1,7 @@
 ---
 permalink: /link/
 title: "Links / 관련 링크"
-author_profile: true
+author_profile: false
 ---
 
 ## Useful Links / 관련 링크
